@@ -15,11 +15,13 @@ export const fethData = (cityName) => async (dispatch) =>{
     try {
         let url =`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=dbf5fec987e94b3c6857e2d6dcfe493a`;
         let getData = await fetch(url);
-        let parsedData = await getData.json();
+        if(getData.status === 200) {
+            let parsedData = await getData.json();
         dispatch({
             type: FETCH_DATA,
             payload: parsedData,
         })
+        }
 
     //   const {temp, humidity, pressure} = parsedData.main;
     //   const {main: weathermood} = parsedData.weather[0];

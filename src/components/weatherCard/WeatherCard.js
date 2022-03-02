@@ -1,23 +1,25 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import "../style/style.css";
 //Child component
-const WeatherCard = ({ weatherApp }) => {
+const WeatherCard = () => {
   const [weatherState, setWeatherState] = useState("");
-  const {
-    temp,
-    humidity,
-    pressure,
-    weathermood,
-    name,
-    speed,
-    country,
-    sunset,
-  } = weatherApp;
-  console.log("weather card");
+  const newState = useSelector((state) => state.showNumber.finalData);
+
+  const { temp, humidity, pressure } =
+    newState && newState.main ? newState.main : {};
+  let mode1 = newState && newState.weather[0].main
+    // newState && newState.weather && newState.weather.length
+    //   ? newState.weather[0].main
+    //   : {};
+  const { name } = newState? newState: {};
+  const { speed } = newState? newState.wind: {};
+  const { country, sunset } = newState? newState.sys: {};
+
   useEffect(() => {
-    console.log("weather card useeffect start");
-    if (weathermood) {
-      switch (weathermood) {
+    debugger
+    if (mode1) {
+      switch (mode1) {
         case "Clouds":
           setWeatherState("wi-day-cloudy");
           break;
@@ -37,7 +39,7 @@ const WeatherCard = ({ weatherApp }) => {
       }
     }
     console.log(" weather card useeffect end");
-  }, [weathermood]);
+  }, [mode1]);
   //converting seconds into minutes and hours
   let sec = sunset;
   let timeStr = new Date(sec * 1000);
@@ -53,7 +55,7 @@ const WeatherCard = ({ weatherApp }) => {
             <span>{temp}&deg;</span>
           </div>
           <div className="description">
-            <div className="weatherCondition">{weathermood}</div>
+            <div className="weatherCondition">{mode1}</div>
             <div className="place">
               {name}, {country}
             </div>
